@@ -1,54 +1,60 @@
 package com.example.ShaSinToDo.ServiceImpl;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.example.ShaSinToDo.Model.Todo;
+import com.example.ShaSinToDo.Model.User;
 import com.example.ShaSinToDo.Service.TodoInterface;
 import com.example.ShaSinToDo.repository.Todorepository;
+import com.example.ShaSinToDo.repository.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
-public class TodoServiceImpl implements TodoInterface {
-@Autowired
-private Todorepository todoRepo;
-	@Override
-	public Todo saveTodo(Todo toDo) {
-		
-		return todoRepo.save(toDo);
-	}
+public  class TodoServiceImpl implements TodoInterface {
+    private final Todorepository todoRepository;
+    private final UserRepository userRepository;
+    @Autowired
+    public TodoServiceImpl(Todorepository todoRepository,UserRepository userRepository) {
+        this.todoRepository = todoRepository;
+        this.userRepository = userRepository;
+    }
 
-	@Override
-	public Todo updateTodo(Todo toDo) {
-		
-		return todoRepo.save(toDo);
-	}
+    @Override
+    public List<Todo> getAllTodosByUserId(String userId) {
+        return todoRepository.findByUserId(userId);
+    }
 
-	@Override
-	public List<Todo> findAllTodo() {
-		
-		return  (List<Todo>) todoRepo.findAll();
-	}
+    @Override
+    public Optional<Todo> getTodoById(Long id)  {
+        return todoRepository.findById(id);
+    }
 
-	@Override
-	public void deleteTodo(Long id) {
-		todoRepo.deleteById(id);
-		
-	}
+    @Override
+    public Todo createTodoByUserId(String userId, Todo todo) {
+        User user =  
+        userRepository.findById(userId).get();
+                
 
-	public Optional<Todo> getTodoDetailsById(Long id) {
-		
-		return todoRepo.findById(id);
-	}
+        todo.setUser(user);
+        return todoRepository.save(todo);
+    }
 
-	
+    @Override
+    public Todo updateTodoById(Long id, Todo todo)  {
+    	Todo existingTodo=todoRepository.findById(id).get();
+    	 
+        existingTodo.setContent(todo.getContent());
+        existingTodo.setCompleted(todo.getCompleted());
+        return todoRepository.save(existingTodo);
+    
+    	
+    }
 
-	
-
-	
-
+    @Override
+    public void deleteTodoById(Long id) {
+     
+        todoRepository.deleteById(id);
+    }
 }

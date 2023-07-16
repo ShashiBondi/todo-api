@@ -10,33 +10,34 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.ShaSinToDo.Model.Todo;
 import com.example.ShaSinToDo.Service.TodoInterface;
-import com.example.ShaSinToDo.ServiceImpl.TodoServiceImpl;
+
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/todos") // Use plural form for endpoint base URL
+@RequestMapping("/api/users/{userId}/todos")
 public class TodoController {
+    private final TodoInterface todoService;
 
     @Autowired
-    private TodoServiceImpl tdsImp;
-
-    // Creating a new TodoItem
-    @PostMapping
-    public ResponseEntity<Todo> createTodo(@RequestBody Todo toDo) {
-        Todo createdTodo = tdsImp.saveTodo(toDo);
-        return new ResponseEntity<>(createdTodo, HttpStatus.CREATED);
+    public TodoController(TodoInterface todoService) {
+        this.todoService = todoService;
     }
 
-    // Fetching all the Todo Items
     @GetMapping
-    public List<Todo> getAllTodos() {
-        return tdsImp.findAllTodo();
+    public ResponseEntity<List<Todo>> getAllTodosByUserId(@PathVariable("userId") String userId) {
+        List<Todo> todos = todoService.getAllTodosByUserId(userId);
+        return new ResponseEntity<>(todos, HttpStatus.OK);
     }
 
-    // Fetching Todo Item by Id
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Todo> getTodoByIdAndUserId( @PathVariable("id") Long id) {
+//        Optional<Todo> todo = todoService.getTodoById(id);
+//        return new ResponseEntity<>(todo, HttpStatus.OK);
+//    }
     @GetMapping("/{id}")
-    public ResponseEntity<Todo> getTodoById(@PathVariable Long id) {
-        Optional<Todo> optionalTodo = tdsImp.getTodoDetailsById(id);
+    public ResponseEntity<Todo> getTodoByIdAndUserId(@PathVariable Long id) {
+       Optional <Todo> optionalTodo = todoService.getTodoById(id);
+       System.out.println(optionalTodo);
         if (optionalTodo.isPresent()) {
             Todo toDo = optionalTodo.get();
             return new ResponseEntity<>(toDo, HttpStatus.OK);
@@ -45,40 +46,34 @@ public class TodoController {
         }
     }
 
-    // Deleting the TodoItem by Id
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTodoById(@PathVariable Long id) {
-        Optional<Todo> optionalTodo = tdsImp.getTodoDetailsById(id);
-        if (optionalTodo.isPresent()) {
-            tdsImp.deleteTodo(id);
-            return new ResponseEntity<>("Todo with ID " + id + " is deleted", HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("No such Todo is present", HttpStatus.NOT_FOUND);
-        }
+    @PostMapping
+    public ResponseEntity<Todo> createTodoByUserId(@PathVariable("userId") String userId, @RequestBody Todo todo) {
+        Todo createdTodo = todoService.createTodoByUserId(userId, todo);
+        return new ResponseEntity<>(createdTodo, HttpStatus.CREATED);
     }
 
-    // Updating the TodoItem by Id
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodoById(@PathVariable Long id, @RequestBody Todo toDo) {
-        Optional<Todo> optionalTodo = tdsImp.getTodoDetailsById(id);
-        if (optionalTodo.isPresent()) {
-            Todo existingTodo = optionalTodo.get();
-            
-            // Update content if provided in the request
-            
-                existingTodo.setContent(toDo.getContent());
-            
-
-            // Update completion status if provided in the request
-            
-                existingTodo.setCompleted(toDo.getCompleted());
-            
-            
-            Todo updatedTodo = tdsImp.saveTodo(existingTodo);
-            return new ResponseEntity<>(updatedTodo, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Todo> updateTodoByIdAndUserId(@PathVariable("userId") String userId, @PathVariable("id") Long id, @RequestBody Todo todo) {
+    	 Optional <Todo> optionalTodo = todoService.getTodoById(id);
+         if (optionalTodo.isPresent())
+         {
+    	
+    	Todo updatedTodo = todoService.updateTodoById(id, todo);
+        return new ResponseEntity<>(updatedTodo, HttpStatus.OK);
     }
+         else {
+        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+         }
+         }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTodoByIdAndUserId(@PathVariable("userId") String userId, @PathVariable("id") Long id) {
+    	 Optional<Todo> optionalTodo = todoService.getTodoById(id);
+         if (optionalTodo.isPresent()) {
+    	todoService.deleteTodoById(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }else {
+    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    }
 }
