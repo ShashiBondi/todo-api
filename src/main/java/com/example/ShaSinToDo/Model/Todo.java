@@ -2,6 +2,8 @@ package com.example.ShaSinToDo.Model;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +23,8 @@ public class Todo {
 	private String content;
 	private Boolean completed = Boolean.FALSE;
 	@ManyToOne
-//	@JoinColumn(name="user_id",nullable=false)
+	@JoinColumn(name="user_id")
+	@JsonIgnore
 	private User user;
 	public Long getId() {
 		return Id;

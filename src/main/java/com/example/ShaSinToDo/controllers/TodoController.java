@@ -29,11 +29,7 @@ public class TodoController {
         return new ResponseEntity<>(todos, HttpStatus.OK);
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Todo> getTodoByIdAndUserId( @PathVariable("id") Long id) {
-//        Optional<Todo> todo = todoService.getTodoById(id);
-//        return new ResponseEntity<>(todo, HttpStatus.OK);
-//    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Todo> getTodoByIdAndUserId(@PathVariable Long id) {
        Optional <Todo> optionalTodo = todoService.getTodoById(id);

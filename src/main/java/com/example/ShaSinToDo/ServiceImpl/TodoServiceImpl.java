@@ -33,11 +33,11 @@ public  class TodoServiceImpl implements TodoInterface {
 
     @Override
     public Todo createTodoByUserId(String userId, Todo todo) {
-        User user =  
-        userRepository.findById(userId).get();
-                
-
-        todo.setUser(user);
+//        User user =  
+//        userRepository.findById(userId).get();
+//                
+//
+//        todo.setUser(user);
         return todoRepository.save(todo);
     }
 
