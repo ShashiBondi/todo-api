@@ -16,7 +16,7 @@ import com.example.ShaSinToDo.Service.TodoInterface;
 @CrossOrigin("*")
 @RequestMapping("/api/users/{userId}/todos")
 public class TodoController {
-    private final TodoInterface todoService;
+    private  TodoInterface todoService;
 
     @Autowired
     public TodoController(TodoInterface todoService) {
@@ -63,11 +63,11 @@ public class TodoController {
          }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTodoByIdAndUserId(@PathVariable("userId") String userId, @PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteTodoByIdAndUserId(@PathVariable("userId") String userId, @PathVariable("id") Long id) {
     	 Optional<Todo> optionalTodo = todoService.getTodoById(id);
          if (optionalTodo.isPresent()) {
     	todoService.deleteTodoById(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Successfully deleted the todo",HttpStatus.NO_CONTENT);
     }else {
     	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

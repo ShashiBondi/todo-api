@@ -11,6 +11,6 @@ public interface TodoInterface {
    
     Todo createTodoByUserId(String userId, Todo todo);
     Todo updateTodoById(Long id, Todo todo);
-    void deleteTodoById(Long id);
+    String deleteTodoById(Long id);
     Optional<Todo> getTodoById(Long id);
 }

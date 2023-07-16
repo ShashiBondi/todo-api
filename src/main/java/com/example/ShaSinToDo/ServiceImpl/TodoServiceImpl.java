@@ -16,7 +16,7 @@ public  class TodoServiceImpl implements TodoInterface {
     private final Todorepository todoRepository;
     private final UserRepository userRepository;
     @Autowired
-    public TodoServiceImpl(Todorepository todoRepository,UserRepository userRepository) {
+    public TodoServiceImpl(Todorepository todoRepository, UserRepository userRepository) {
         this.todoRepository = todoRepository;
         this.userRepository = userRepository;
     }
@@ -33,11 +33,11 @@ public  class TodoServiceImpl implements TodoInterface {
 
     @Override
     public Todo createTodoByUserId(String userId, Todo todo) {
-//        User user =  
-//        userRepository.findById(userId).get();
-//                
-//
-//        todo.setUser(user);
+        User user =  
+        userRepository.findById(userId).get();
+                
+
+        todo.setUser(user);
         return todoRepository.save(todo);
     }
 
@@ -53,8 +53,9 @@ public  class TodoServiceImpl implements TodoInterface {
     }
 
     @Override
-    public void deleteTodoById(Long id) {
+    public String deleteTodoById(Long id) {
      
         todoRepository.deleteById(id);
+        return "Successfully deleted";
     }
 }
