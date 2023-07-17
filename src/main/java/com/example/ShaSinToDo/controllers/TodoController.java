@@ -67,9 +67,9 @@ public class TodoController {
     	 Optional<Todo> optionalTodo = todoService.getTodoById(id);
          if (optionalTodo.isPresent()) {
     	todoService.deleteTodoById(id);
-        return new ResponseEntity<>("Successfully deleted the todo",HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>("Successfully deleted the todo with id:"+id,HttpStatus.NO_CONTENT);
     }else {
-    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	return new ResponseEntity<>("Todo not found with the id"+id,HttpStatus.NOT_FOUND);
     }
     }
 }

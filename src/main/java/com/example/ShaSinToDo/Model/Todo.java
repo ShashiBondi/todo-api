@@ -23,8 +23,8 @@ public class Todo {
 	private String content;
 	private Boolean completed = Boolean.FALSE;
 	@ManyToOne
-@JoinColumn(name="user_id")
-@JsonIgnore
+    @JoinColumn(name="user_id")
+   @JsonIgnore
 	private User user;
 	public Long getId() {
 		return Id;
