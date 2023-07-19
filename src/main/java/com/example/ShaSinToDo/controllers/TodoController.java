@@ -49,7 +49,7 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodoByIdAndUserId(@PathVariable("userId") String userId, @PathVariable("id") Long id, @RequestBody Todo todo) {
+    public ResponseEntity<Todo> updateTodoByIdAndUserId( @PathVariable("id") Long id, @RequestBody Todo todo) {
     	 Optional <Todo> optionalTodo = todoService.getTodoById(id);
          if (optionalTodo.isPresent())
          {
@@ -63,7 +63,7 @@ public class TodoController {
          }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteTodoByIdAndUserId(@PathVariable("userId") String userId, @PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteTodoByIdAndUserId( @PathVariable("id") Long id) {
     	 Optional<Todo> optionalTodo = todoService.getTodoById(id);
          if (optionalTodo.isPresent()) {
     	todoService.deleteTodoById(id);
