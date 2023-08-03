@@ -6,5 +6,6 @@ import com.example.ShaSinToDo.Model.User;
 @Service
 public interface UserService {
     User createUser(User user);
+    
 }
 
